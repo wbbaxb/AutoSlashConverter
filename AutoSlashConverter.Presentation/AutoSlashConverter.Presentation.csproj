@@ -25,6 +25,8 @@
 	  <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
 	  <!-- 支持的目标平台 -->
 	  <Platforms>AnyCPU;x86;x64</Platforms>
+	  <!-- 指定目标运行时为Windows 64位 -->
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
 	<!-- 只在Release模式下应用发布设置 -->

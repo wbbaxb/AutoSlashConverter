@@ -1,19 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <!-- 定义程序类型为Windows可执行文件 -->
 	  <OutputType>WinExe</OutputType>
+	  <!-- 目标框架为.NET 8.0 Windows -->
 	  <TargetFramework>net8.0-windows</TargetFramework>
+	  <!-- 启用WPF支持 -->
 	  <UseWPF>true</UseWPF>
+	  <!-- 设置应用程序图标 -->
 	  <ApplicationIcon>Images/Logo.ico</ApplicationIcon>
+	  <!-- 自定义输出目录为上级目录的builds文件夹 -->
 	  <BaseOutputPath>..\builds</BaseOutputPath>
+	  <!-- 目标平台为64位 -->
 	  <PlatformTarget>x64</PlatformTarget>
+	  <!-- 自定义程序集名称 -->
 	  <AssemblyName>AutoSlashConverter</AssemblyName>
+	  <!-- 指定根命名空间 -->
 	  <RootNamespace>AutoSlashConverter.Presentation</RootNamespace>
+	  <!-- 不在输出路径中附加目标框架名称 -->
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <!-- 不在输出路径中附加运行时标识符 -->
 	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	  <!-- 不在输出路径中附加平台名称 -->
 	  <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+	  <!-- 支持的目标平台 -->
 	  <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
+
+	<!-- 只在Release模式下应用发布设置 -->
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+	  <!-- 发布为单个文件 -->
+	  <PublishSingleFile>true</PublishSingleFile>
+	  <!-- 包含.NET运行时(自包含)，不需要目标机器安装.NET -->
+	  <SelfContained>true</SelfContained>
+	  <!-- 指定目标运行时为Windows 64位 -->
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	  <!-- 启用预编译优化，提高启动速度 -->
+	  <PublishReadyToRun>true</PublishReadyToRun>
+	  <!-- 包含并自动提取原生库 -->
+	  <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<Compile Remove="bin\**" />
@@ -23,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- 防止Logo.ico被复制到输出目录 -->
 		<None Remove="Images\Logo.ico" />
 	</ItemGroup>
 	

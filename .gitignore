@@ -55,3 +55,4 @@ nunit-*.xml
 *.vs
 *.pubxml
 *.user
+publish/

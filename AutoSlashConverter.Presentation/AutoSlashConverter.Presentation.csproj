@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <OutputType>WinExe</OutputType>
+	  <TargetFramework>net8.0-windows</TargetFramework>
+	  <UseWPF>true</UseWPF>
+	  <ApplicationIcon>Images/Logo.ico</ApplicationIcon>
+	  <BaseOutputPath>..\builds</BaseOutputPath>
+	  <PlatformTarget>x64</PlatformTarget>
+	  <AssemblyName>AutoSlashConverter</AssemblyName>
+	  <RootNamespace>AutoSlashConverter.Presentation</RootNamespace>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	  <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+	  <Platforms>AnyCPU;x86;x64</Platforms>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="bin\**" />
+		<EmbeddedResource Remove="bin\**" />
+		<None Remove="bin\**" />
+		<Page Remove="bin\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Images\Logo.ico" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Resource Include="Images\Logo.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+		<PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AutoSlashConverter.Framework\AutoSlashConverter.Framework.csproj" />
+	</ItemGroup>
+</Project>

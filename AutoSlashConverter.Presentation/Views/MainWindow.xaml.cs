@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -22,10 +21,13 @@ namespace AutoSlashConverter.Presentation.Views
         {
             InitializeComponent();
 
-            this.Loaded += (s, e) =>
+            this.WindowState = WindowState.Minimized;
+
+            // 在窗口完全初始化后执行隐藏
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 this.Hide();
-            };
+            }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
             this.Unloaded += (s, e) =>
             {

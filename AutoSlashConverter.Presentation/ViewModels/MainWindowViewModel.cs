@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using System.Windows;
 using System.Windows.Input;
@@ -21,5 +22,13 @@ namespace AutoSlashConverter.Presentation.ViewModels
         });
 
         public ICommand ShutdownCommand => new RelayCommand(Application.Current.Shutdown);
+
+        public ICommand ShowStartupNotificationCommand => new RelayCommand(ShowStartupNotification);
+
+        private void ShowStartupNotification()
+        {
+            var taskbarIcon = Application.Current.MainWindow.FindName("MyNotifyIcon") as TaskbarIcon;
+            taskbarIcon?.ShowBalloonTip(Title, "程序已在后台运行", BalloonIcon.Info);
+        }
     }
 }

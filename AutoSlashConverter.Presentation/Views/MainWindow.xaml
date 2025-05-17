@@ -20,6 +20,12 @@
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ShowStartupNotificationCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <tb:TaskbarIcon x:Name="MyNotifyIcon"
                         DoubleClickCommand="{Binding ShowCommand}"

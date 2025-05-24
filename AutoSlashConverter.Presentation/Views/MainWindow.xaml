@@ -21,6 +21,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/ToggleSwitchStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ContextMenuStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
         </ResourceDictionary>
@@ -42,9 +43,39 @@
                         IconSource="/Images/Logo.ico"
                         LeftClickCommand="{Binding ShowCommand}"
                         ToolTipText="{Binding Title}">
+            <tb:TaskbarIcon.TrayToolTip>
+                <Border Margin="0,2"
+                        Background="White"
+                        BorderBrush="Orange"
+                        BorderThickness="1"
+                        CornerRadius="6">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <Image Width="16" Source="/Images/Logo.ico" />
+                        <TextBlock Margin="10,0,5,0"
+                                   FontSize="16"
+                                   Text="{Binding ConversionStatusText}" />
+                    </StackPanel>
+                </Border>
+            </tb:TaskbarIcon.TrayToolTip>
+
             <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Command="{Binding ShutdownCommand}" Header="退出" />
+                <ContextMenu Style="{StaticResource CompactContextMenu}">
+                    <CheckBox Height="35"
+                              Margin="-30,0"
+                              VerticalContentAlignment="Center"
+                              Content="{Binding ConversionStatusText}"
+                              IsChecked="{Binding IsConversionEnabled}"
+                              Style="{StaticResource CustomToggleSwitch}" />
+
+                    <Separator Style="{StaticResource CompactSeparator}" />
+
+                    <MenuItem Height="35"
+                              VerticalAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Command="{Binding ShutdownCommand}"
+                              FontSize="16"
+                              Header="退出"
+                              Style="{StaticResource CompactMenuItem}" />
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>

@@ -8,7 +8,22 @@ namespace AutoSlashConverter.Presentation.ViewModels
 {
     public class MainWindowViewModel : ObservableObject
     {
+        private bool _isConversionEnabled = true;
+        
         public static string Title => "AutoSlashConverter";
+
+        public bool IsConversionEnabled
+        {
+            get => _isConversionEnabled;
+            set
+            {
+                _isConversionEnabled = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ConversionStatusText));
+            }
+        }
+
+        public string ConversionStatusText => IsConversionEnabled ? "已启用" : "已禁用";
 
         public ICommand MinsizeCommand => new RelayCommand(() => Application.Current.MainWindow.WindowState = WindowState.Minimized);
 

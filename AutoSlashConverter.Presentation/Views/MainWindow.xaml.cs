@@ -1,4 +1,5 @@
 ﻿using AutoSlashConverter.Framework.Utilities;
+using AutoSlashConverter.Presentation.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
@@ -93,10 +94,13 @@ namespace AutoSlashConverter.Presentation.Views
                     break;
 
                 case Win32.WM_CLIPBOARDUPDATE:
-                    if (_isProcessingClipboard)
+                    // 检查是否启用转换功能
+                    var viewModel = this.DataContext as MainWindowViewModel;
+                    if (viewModel?.IsConversionEnabled != true || _isProcessingClipboard)
                     {
                         break;
                     }
+                    
                     try
                     {
                         _isProcessingClipboard = true;

@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:AutoSlashConverter.Presentation.Behaviors"
+        xmlns:converters="clr-namespace:AutoSlashConverter.Presentation.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:AutoSlashConverter.Presentation"
@@ -15,6 +16,15 @@
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/ToggleSwitchStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Window.DataContext>
         <viewmodels:MainWindowViewModel />
@@ -39,27 +49,48 @@
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
 
-        <Border Width="340"
-                Height="200"
+        <Border Width="400"
+                Height="280"
                 Background="White"
-                BorderBrush="#489012"
-                BorderThickness="2"
-                CornerRadius="10">
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="12">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20"
+                                  Opacity="0.3"
+                                  ShadowDepth="8"
+                                  Color="#30000000" />
+            </Border.Effect>
+
             <i:Interaction.Behaviors>
                 <behaviors:ItemMouseDownBehavior />
             </i:Interaction.Behaviors>
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="60" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
 
-                <Grid>
-                    <TextBlock HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               Text="{Binding Title}" />
+                <Grid Grid.Row="0" Background="#FAFAFA">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                                Margin="20,0"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                        <Ellipse Style="{StaticResource StatusIndicator}" />
+                        <TextBlock VerticalAlignment="Center"
+                                   FontSize="18"
+                                   FontWeight="Medium"
+                                   Foreground="#333"
+                                   Text="{Binding Title}" />
+                    </StackPanel>
+
                     <StackPanel Margin="10"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
@@ -92,13 +123,67 @@
                     </StackPanel>
                 </Grid>
 
-                <Grid Grid.Row="1" Margin="10">
-                    <TextBlock HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="20"
-                               Foreground="Orange"
-                               Text="程序运行中..." />
+                <Grid Grid.Row="1" Margin="30,20">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Margin="0,0,0,25"
+                                   HorizontalAlignment="Center"
+                                   FontSize="20"
+                                   FontWeight="Light"
+                                   Foreground="{Binding IsConversionEnabled, Converter={StaticResource BoolToColorConverter}}"
+                                   Text="{Binding ConversionStatusText}" />
+
+                        <CheckBox Margin="0,0,0,20"
+                                  HorizontalAlignment="Center"
+                                  Content="{Binding ConversionStatusText}"
+                                  IsChecked="{Binding IsConversionEnabled}"
+                                  Style="{StaticResource CustomToggleSwitch}" />
+
+                        <Border Margin="0,10,0,0"
+                                Padding="15"
+                                Background="#F8F9FA"
+                                CornerRadius="8">
+                            <StackPanel>
+                                <TextBlock Margin="0,0,0,8"
+                                           FontSize="13"
+                                           FontWeight="Medium"
+                                           Foreground="#666"
+                                           Text="功能说明" />
+                                <TextBlock Margin="0,0,0,4"
+                                           FontSize="12"
+                                           Foreground="#888"
+                                           Text="• 监听剪贴板，自动将 Windows 路径中的 \ 转换为 /"
+                                           TextWrapping="Wrap" />
+                                <TextBlock FontSize="12"
+                                           Foreground="#888"
+                                           Text="• 例如：C:\Users\Name → C:/Users/Name"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
                 </Grid>
+
+                <Border Grid.Row="2"
+                        Background="#F8F9FA"
+                        CornerRadius="0,0,12,12">
+                    <Grid Margin="20,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   FontSize="11"
+                                   Foreground="#999"
+                                   Text="程序运行在系统托盘" />
+
+                        <TextBlock Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   FontSize="11"
+                                   Foreground="#999"
+                                   Text="ESC 隐藏窗口" />
+                    </Grid>
+                </Border>
             </Grid>
         </Border>
     </Grid>

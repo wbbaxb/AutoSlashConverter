@@ -1,0 +1,147 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="CustomToggleSwitch" TargetType="CheckBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  开关背景  -->
+                        <Border x:Name="SwitchTrack"
+                                Grid.Column="0"
+                                Width="60"
+                                Height="30"
+                                Background="#DDDDDD"
+                                CornerRadius="15"
+                                Cursor="Hand">
+
+                            <!--  开关按钮  -->
+                            <Ellipse x:Name="SwitchThumb"
+                                     Width="26"
+                                     Height="26"
+                                     Margin="2,2,0,0"
+                                     HorizontalAlignment="Left"
+                                     Effect="{DynamicResource SwitchShadow}"
+                                     Fill="White">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform x:Name="ThumbTransform" X="0" />
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Border>
+
+                        <!--  文字标签  -->
+                        <TextBlock x:Name="SwitchLabel"
+                                   Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Foreground="#333333"
+                                   Text="{TemplateBinding Content}" />
+                    </Grid>
+
+                    <ControlTemplate.Resources>
+                        <!--  阴影效果  -->
+                        <DropShadowEffect x:Key="SwitchShadow"
+                                          BlurRadius="3"
+                                          ShadowDepth="1"
+                                          Color="#40000000" />
+                    </ControlTemplate.Resources>
+
+                    <ControlTemplate.Triggers>
+                        <!--  选中状态  -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--  滑块动画  -->
+                                        <DoubleAnimation Storyboard.TargetName="ThumbTransform"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="30"
+                                                         Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <!--  背景颜色动画  -->
+                                        <ColorAnimation Storyboard.TargetName="SwitchTrack"
+                                                        Storyboard.TargetProperty="Background.Color"
+                                                        To="#4CAF50"
+                                                        Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--  滑块动画  -->
+                                        <DoubleAnimation Storyboard.TargetName="ThumbTransform"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="0"
+                                                         Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <!--  背景颜色动画  -->
+                                        <ColorAnimation Storyboard.TargetName="SwitchTrack"
+                                                        Storyboard.TargetProperty="Background.Color"
+                                                        To="#DDDDDD"
+                                                        Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <!--  悬停效果  -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="SwitchThumb" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="5"
+                                                      ShadowDepth="2"
+                                                      Color="#60000000" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+
+                        <!--  禁用状态  -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="SwitchTrack" Property="Background" Value="#F0F0F0" />
+                            <Setter TargetName="SwitchThumb" Property="Fill" Value="#E0E0E0" />
+                            <Setter TargetName="SwitchLabel" Property="Foreground" Value="#AAAAAA" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  状态指示器样式  -->
+    <Style x:Key="StatusIndicator" TargetType="Ellipse">
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+        <Setter Property="Margin" Value="0,0,8,0" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsConversionEnabled}" Value="True">
+                <Setter Property="Fill" Value="#4CAF50" />
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever">
+                            <DoubleAnimation AutoReverse="True"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="1"
+                                             To="0.3"
+                                             Duration="0:0:1" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsConversionEnabled}" Value="False">
+                <Setter Property="Fill" Value="#FF9800" />
+                <Setter Property="Opacity" Value="1" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary> 

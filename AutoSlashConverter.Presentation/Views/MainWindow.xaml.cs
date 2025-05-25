@@ -66,7 +66,7 @@ namespace AutoSlashConverter.Presentation.Views
         }
 
         /// <summary>
-        /// 捕获自定义消息（显示并置顶窗口）
+        /// 捕获自定义消息
         /// </summary>
         /// <param name="e"></param>
         protected override void OnSourceInitialized(EventArgs e)
@@ -114,7 +114,7 @@ namespace AutoSlashConverter.Presentation.Views
                                 clipboardText.Contains(@"\") &&
                                 !clipboardText.Contains(@"/"))
                             {
-                                string modifiedText = clipboardText.Replace("\\", "/");
+                                string modifiedText = Regex.Replace(clipboardText, @"\\+", "/");
                                 if (modifiedText != clipboardText)
                                 {
                                     Win32.RemoveClipboardFormatListener(hwnd);

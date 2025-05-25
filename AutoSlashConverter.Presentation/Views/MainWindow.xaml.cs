@@ -1,5 +1,6 @@
 ﻿using AutoSlashConverter.Framework.Utilities;
 using AutoSlashConverter.Presentation.ViewModels;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
@@ -12,7 +13,7 @@ namespace AutoSlashConverter.Presentation.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IRecipient<string>
     {
         private const int WM_USER = 0x0400; // 0x0400 是用户定义的消息起始值
         public const int WM_RESTOREWINDOW = WM_USER + 1; // 自定义消息，用于恢复窗口
@@ -22,13 +23,15 @@ namespace AutoSlashConverter.Presentation.Views
         {
             InitializeComponent();
 
-            this.WindowState = WindowState.Minimized;
+            WeakReferenceMessenger.Default.Register(this);
 
-            // 在窗口完全初始化后执行隐藏
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                this.Hide();
-            }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+            //this.WindowState = WindowState.Minimized;
+
+            //// 在窗口完全初始化后执行隐藏
+            //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            //{
+            //    this.Hide();
+            //}), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
             this.Unloaded += (s, e) =>
             {
@@ -37,6 +40,8 @@ namespace AutoSlashConverter.Presentation.Views
                 {
                     Win32.RemoveClipboardFormatListener(hwnd);
                 }
+
+                WeakReferenceMessenger.Default.Unregister<string>(this);
             };
 
             MyNotifyIcon.ContextMenu.Opened += (s, e) =>
@@ -117,9 +122,9 @@ namespace AutoSlashConverter.Presentation.Views
                                 string modifiedText = Regex.Replace(clipboardText, @"\\+", "/");
                                 if (modifiedText != clipboardText)
                                 {
-                                    Win32.RemoveClipboardFormatListener(hwnd);
-                                    Clipboard.SetText(modifiedText);
-                                    Win32.AddClipboardFormatListener(hwnd);
+                                    SetClipboardText(hwnd, modifiedText);
+
+                                    viewModel.AddConversionHistory(clipboardText, modifiedText);
                                 }
                             }
                         }
@@ -132,6 +137,7 @@ namespace AutoSlashConverter.Presentation.Views
                     {
                         _isProcessingClipboard = false;
                     }
+
                     handled = true;
                     break;
             }
@@ -145,6 +151,27 @@ namespace AutoSlashConverter.Presentation.Views
                 return false;
 
             return Regex.IsMatch(text, @"^([a-zA-Z]:\\|\\.*|\.{1,2}\\|[\w\s$.-]+\\)", RegexOptions.IgnoreCase);
+        }
+
+        public void Receive(string message)
+        {
+            SetClipboardWithoutConversion(message);
+        }
+
+        private void SetClipboardWithoutConversion(string text)
+        {
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
+            SetClipboardText(hwnd, text);
+        }
+
+        private void SetClipboardText(IntPtr hwnd, string text)
+        {
+            if (hwnd != IntPtr.Zero)
+            {
+                Win32.RemoveClipboardFormatListener(hwnd);
+                Clipboard.SetText(text);
+                Win32.AddClipboardFormatListener(hwnd);
+            }
         }
     }
 }

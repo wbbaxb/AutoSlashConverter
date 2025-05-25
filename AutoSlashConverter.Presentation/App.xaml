@@ -1,9 +1,22 @@
 ﻿<Application x:Class="AutoSlashConverter.Presentation.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:AutoSlashConverter.Presentation.Converters"
              xmlns:local="clr-namespace:AutoSlashConverter.Presentation"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+                    <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="/Styles/BrushStyles.xaml" />
+                <ResourceDictionary Source="/styles/ScrollViewerStyles.xaml" />
+                <ResourceDictionary Source="/styles/TabItemStyles.xaml" />
+                <ResourceDictionary Source="/Styles/ToggleSwitchStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ContextMenuStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

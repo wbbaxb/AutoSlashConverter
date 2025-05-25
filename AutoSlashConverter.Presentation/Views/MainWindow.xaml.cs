@@ -100,7 +100,7 @@ namespace AutoSlashConverter.Presentation.Views
                     {
                         break;
                     }
-                    
+
                     try
                     {
                         _isProcessingClipboard = true;
@@ -110,7 +110,7 @@ namespace AutoSlashConverter.Presentation.Views
                             string clipboardText = Clipboard.GetText();
                             if (clipboardText != null &&
                                 clipboardText.Length > 2 &&
-                                Regex.IsMatch(clipboardText, @"^[a-zA-Z]:\\") &&
+                                IsWindowsPath(clipboardText) &&
                                 clipboardText.Contains(@"\") &&
                                 !clipboardText.Contains(@"/"))
                             {
@@ -137,6 +137,14 @@ namespace AutoSlashConverter.Presentation.Views
             }
 
             return IntPtr.Zero;
+        }
+
+        private bool IsWindowsPath(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            return Regex.IsMatch(text, @"^([a-zA-Z]:\\|\\.*|\.{1,2}\\|[\w\s$.-]+\\)", RegexOptions.IgnoreCase);
         }
     }
 }
